@@ -65,10 +65,10 @@ type Camera struct {
 	VideoMode               string `json:"videoMode"`
 }
 
-func NewClient(baseURL, username, password string) *SurveillanceStationClient {
+func NewClient(baseURL, username, password string, insecureSkipVerify bool) *SurveillanceStationClient {
 	// Create a custom HTTP client that skips TLS verification
 	tr := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: insecureSkipVerify},
 	}
 	client := &http.Client{Transport: tr}
 
