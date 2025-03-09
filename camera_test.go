@@ -1,4 +1,4 @@
-package main
+package sssg
 
 import (
 	"encoding/json"
