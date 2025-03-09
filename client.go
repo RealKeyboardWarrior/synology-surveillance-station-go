@@ -105,7 +105,7 @@ func (c *SurveillanceStationClient) ListCameras() ([]Camera, error) {
 
 // TakeSnapshot returns the camera snapshot as bytes
 func (c *SurveillanceStationClient) TakeSnapshot(camera Camera) ([]byte, error) {
-	fmt.Printf("Taking snapshot for camera ID: %d, Name: %s\n", camera.ID, camera.Name)
+	fmt.Printf("Taking snapshot for camera ID: %d, Name: %s\n", camera.ID, camera.NewName)
 
 	endpoint := fmt.Sprintf("%s/webapi/entry.cgi", c.BaseURL)
 	params := url.Values{}
