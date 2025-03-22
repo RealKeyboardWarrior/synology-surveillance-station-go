@@ -108,8 +108,39 @@ func (c *SurveillanceStationClient) Login() error {
 	}
 
 	c.Session = result.Data.Sid
-	fmt.Println("Login successful, session ID:", c.Session)
 	return nil
+}
+
+// Get Home Mode Info
+func (c *SurveillanceStationClient) GetHomeModeInfo() (*HomeModeInfo, error) {
+	endpoint := fmt.Sprintf("%s/webapi/entry.cgi", c.BaseURL)
+	params := url.Values{}
+	params.Set("api", "SYNO.SurveillanceStation.HomeMode")
+	params.Set("method", "GetInfo")
+	params.Set("version", "1")
+	params.Set("need_mobiles", "true")
+	params.Set("_sid", c.Session)
+
+	resp, err := c.Client.Get(endpoint + "?" + params.Encode())
+	if err != nil {
+		return nil, fmt.Errorf("failed to retrieve home mode info: %v", err)
+	}
+	defer resp.Body.Close()
+
+	var result struct {
+		Success bool         `json:"success"`
+		Data    HomeModeInfo `json:"data"`
+	}
+	err = json.NewDecoder(resp.Body).Decode(&result)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode home mode info response: %v", err)
+	}
+
+	if !result.Success {
+		return nil, fmt.Errorf("failed to retrieve home mode info")
+	}
+
+	return &result.Data, nil
 }
 
 // List available cameras and return them
